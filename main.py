@@ -9,11 +9,20 @@ from wish_list import item_list
 
 MY_EMAIL = os.environ.get("EMAIL")
 EMAIL_PASSWORD = os.environ.get("EMAIL_PW")
+SHEETY_API = os.environ.get("SHEETY_API")
+SHEETY_TOKEN = os.environ.get("SHEETY_TOKEN")
+SHEETY_HEADERS = {
+    "Authorization": f"Bearer {SHEETY_TOKEN}"
+}
 
 amazon_headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
     "Accept-Language": "en-US,en;q=0.9"
 }
+
+sheety_response = requests.get(url=SHEETY_API, headers=SHEETY_HEADERS)
+sheety_data = sheety_response.json()
+item_list = sheety_data["wishList"]
 
 message = ''
 
@@ -32,9 +41,9 @@ for _ in range(len(item_list)):
 
     product_title = soup.select_one("#productTitle").getText().strip()
 
-    if price < item_list[_]["price_wanted"]:
+    if price < item_list[_]["priceWanted"]:
         # deal_list.append(item_list[_]["title"])
-        message += f"{product_title}is now only ${price}\n\n"
+        message += f"{product_title} is now only ${price}\n\n"
 
 
 print(message)
