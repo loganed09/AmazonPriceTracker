@@ -1,3 +1,4 @@
 *.env
 urls.py
 venv
+wish_list.py
